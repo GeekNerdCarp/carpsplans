@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carp's Lesson Plans</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+    <!-- Setup Wizard -->
+    <div id="setup-wizard" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Welcome to Carp's Lesson Planner</h2>
+                <p>Let's set up your teaching environment</p>
+            </div>
+            <div class="modal-body">
+                <div class="wizard-step active" id="step-1">
+                    <h3>Step 1: Basic Information</h3>
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-control" id="teacher-name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">School Name</label>
+                        <input type="text" class="form-control" id="school-name" placeholder="Enter school name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Academic Year</label>
+                        <input type="text" class="form-control" id="academic-year" value="2024-2025">
+                    </div>
+                </div>
+                <div class="wizard-step" id="step-2">
+                    <h3>Step 2: Create Your First Class</h3>
+                    <div class="form-group">
+                        <label class="form-label">Class Name</label>
+                        <input type="text" class="form-control" id="first-class-name" placeholder="e.g., Algebra I">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Subject</label>
+                        <select class="form-control" id="first-class-subject">
+                            <option value="">Select Subject</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="English Language Arts">English Language Arts</option>
+                            <option value="Science">Science</option>
+                            <option value="Social Studies">Social Studies</option>
+                            <option value="Foreign Language">Foreign Language</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Arts">Technology</option>
+                            <option value="Physical Education">Physical Education</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Grade Level</label>
+                        <input type="text" class="form-control" id="first-class-grade" placeholder="e.g., 9th Grade">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Room</label>
+                        <input type="text" class="form-control" id="first-class-room" placeholder="e.g., Room 201">
+                    </div>
+                </div>
+                <div class="wizard-step" id="step-3">
+                    <h3>Step 3: Preferences</h3>
+                    <div class="form-group">
+                        <label class="form-label">Theme</label>
+                        <select class="form-control" id="theme-preference">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Default View</label>
+                        <select class="form-control" id="default-view">
+                            <option value="dashboard">Dashboard</option>
+                            <option value="week">Week Calendar</option>
+                            <option value="month">Month Calendar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Start of Week</label>
+                        <select class="form-control" id="start-of-week">
+                            <option value="sunday">Sunday</option>
+                            <option value="monday">Monday</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" id="wizard-prev" disabled>Previous</button>
+                <button class="btn btn--primary" id="wizard-next">Next</button>
+                <button class="btn btn--primary hidden" id="wizard-finish">Get Started</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="hidden">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <div class="brand-section">
+                    <!-- Placeholder logo - 1x1 transparent PNG -->
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAAWgmWQ0AAAAASUVORK5CYII=" alt="LessonPlan Pro Logo" class="brand-logo">
+                    <h1 class="app-title">Carp's Lesson Plans</h1>
+                </div>
+                <div class="breadcrumb">
+                    <span id="current-view">Dashboard</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="btn btn--outline btn--sm" id="search-btn">
+                    <span>🔍</span> Search
+                </button>
+                <button class="btn btn--outline btn--sm" id="theme-toggle">
+                    <span id="theme-icon">🌙</span>
+                </button>
+                <div class="user-menu">
+                    <button class="btn btn--secondary btn--sm" id="user-menu-btn">
+                        <span id="user-name">Teacher</span> ▼
+                    </button>
+                    <div class="dropdown-menu hidden" id="user-dropdown">
+                        <a href="#" id="settings-link">Settings</a>
+                        <a href="#" id="backup-link">Backup & Restore</a>
+                        <a href="#" id="help-link">Help</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <ul class="nav-menu">
+                <li><a href="#" class="nav-link active" data-view="dashboard">📊 Dashboard</a></li>
+                <li><a href="#" class="nav-link" data-view="lessons">📝 Plans</a></li>
+                <li><a href="#" class="nav-link" data-view="classes">🏫 Classes</a></li>
+                <li><a href="#" class="nav-link" data-view="templates">📋 Templates</a></li>
+                <li><a href="#" class="nav-link" data-view="settings">⚙️ Settings</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Dashboard View -->
+            <div class="view active" id="dashboard-view">
+                <div class="dashboard-header">
+                    <h2>Teaching Dashboard</h2>
+                    <div class="quick-actions">
+                        <button class="btn btn--primary" id="new-lesson-btn">➕ New Lesson</button>
+                        <button class="btn btn--secondary" id="new-template-btn">📋 New Template</button>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Today's Schedule</h3>
+                                <div id="todays-schedule" class="schedule-preview flex-col gap-12">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Quick Stats</h3>
+                                <div class="stats-grid">
+                                    <div class="stat-item">
+                                        <span class="stat-value" id="total-lessons">0</span>
+                                        <span class="stat-label">Total Lessons</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-value" id="lessons-this-week">0</span>
+                                        <span class="stat-label">This Week</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-value" id="total-templates">0</span>
+                                        <span class="stat-label">Templates</span>
+                                    </div>
+                                    <div class="stat-item">
+                                        <span class="stat-value" id="total-classes">0</span>
+                                        <span class="stat-label">Classes</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card dashboard-card--full">
+                        <div class="card">
+                            <div class="card__body">
+                                <h3>Recent Lessons</h3>
+                                <div id="recent-lessons" class="recent-lessons flex-col gap-12">
+                                    <!-- Populated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calendar View (still present, nav removed) -->
+            <div class="view" id="calendar-view">
+                <div class="calendar-header">
+                    <div class="calendar-nav">
+                        <button class="btn btn--outline" id="prev-period">‹</button>
+                        <h2 id="calendar-title">July 2025</h2>
+                        <button class="btn btn--outline" id="next-period">›</button>
+                    </div>
+                    <div class="calendar-controls">
+                        <div class="view-toggles">
+                            <button class="btn btn--outline btn--sm calendar-view-btn active" data-view="week">Week</button>
+                            <button class="btn btn--outline btn--sm calendar-view-btn" data-view="month">Month</button>
+                        </div>
+                        <button class="btn btn--primary" id="add-lesson-btn">➕ Add Lesson</button>
+                    </div>
+                </div>
+                <div id="calendar-container" class="calendar-container">
+                    <!-- Calendar will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Lessons View -->
+            <div class="view" id="lessons-view">
+                <div class="lessons-header">
+                    <h2>Lesson Plans</h2>
+                    <div class="lessons-controls">
+                        <div class="search-filter">
+                            <input type="text" class="form-control" id="lesson-search" placeholder="Search lessons...">
+                            <select class="form-control" id="lesson-filter">
+                                <option value="">All Lessons</option>
+                                <option value="draft">Draft</option>
+                                <option value="ready">Ready</option>
+                                <option value="taught">Taught</option>
+                            </select>
+                        </div>
+                        <button class="btn btn--primary" id="create-lesson-btn">➕ Create Lesson</button>
+                    </div>
+                </div>
+                <div id="lessons-grid" class="lessons-grid">
+                    <!-- Lessons will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Templates View -->
+            <div class="view" id="templates-view">
+                <div class="templates-header">
+                    <h2>Lesson Templates</h2>
+                    <div class="templates-controls">
+                        <input type="text" class="form-control" id="template-search" placeholder="Search templates...">
+                        <button class="btn btn--primary" id="create-template-btn">➕ Create Template</button>
+                    </div>
+                </div>
+                <div id="templates-grid" class="templates-grid">
+                    <!-- Templates will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Classes View -->
+            <div class="view" id="classes-view">
+                <div class="classes-header">
+                    <h2>My Classes</h2>
+                    <button class="btn btn--primary" id="create-class-btn">➕ Add Class</button>
+                </div>
+                <div id="classes-grid" class="classes-grid">
+                    <!-- Classes will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Settings View (new placeholder) -->
+            <div class="view" id="settings-view">
+                <div class="settings-header">
+                    <h2>Settings</h2>
+                    <p class="mb-8">Update your application preferences.</p>
+                    <div class="form-group">
+                        <label class="form-label" for="settings-theme-select">Theme</label>
+                        <select id="settings-theme-select" class="form-control">
+                            <option value="light">Light</option>
+                            <option value="dark">Dark</option>
+                        </select>
+                    </div>
+                    <button class="btn btn--primary" id="apply-settings-btn">Apply Settings</button>
+                </div>
+            </div>
+
+            <!-- Standards View (kept for internal use, nav removed) -->
+            <div class="view" id="standards-view">
+                <div class="standards-header">
+                    <h2>Educational Standards</h2>
+                    <div class="standards-controls">
+                        <input type="text" class="form-control" id="standards-search" placeholder="Search standards...">
+                        <select class="form-control" id="standards-subject">
+                            <option value="">All Subjects</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="English Language Arts">English Language Arts</option>
+                            <option value="Science">Science</option>
+                            <option value="Social Studies">Social Studies</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="standards-list" class="standards-list">
+                    <!-- Standards will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Reports View (kept for compatibility, nav removed) -->
+            <div class="view" id="reports-view">
+                <div class="reports-header">
+                    <h2>Teaching Reports</h2>
+                    <div class="report-controls">
+                        <select class="form-control" id="report-type">
+                            <option value="overview">Teaching Overview</option>
+                            <option value="standards">Standards Coverage</option>
+                            <option value="lessons">Lesson Analytics</option>
+                        </select>
+                        <button class="btn btn--primary" id="generate-report-btn">Generate Report</button>
+                    </div>
+                </div>
+                <div id="report-content" class="report-content">
+                    <!-- Report content will be populated by JS -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Lesson Editor Modal -->
+    <div id="lesson-editor" class="modal hidden">
+        <div class="modal-content modal-content--large">
+            <div class="modal-header">
+                <h2 id="lesson-editor-title">Create Lesson</h2>
+                <button class="modal-close" id="close-lesson-editor">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="lesson-form">
+                    <div class="lesson-form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Lesson Title</label>
+                            <input type="text" class="form-control" id="lesson-title" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Class</label>
+                            <select class="form-control" id="lesson-class" required>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date</label>
+                            <input type="date" class="form-control" id="lesson-date" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Period</label>
+                            <select class="form-control" id="lesson-period">
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="lesson-sections">
+                        <div class="section-tabs">
+                            <button type="button" class="tab-btn active" data-section="objective">Objective</button>
+                            <button type="button" class="tab-btn" data-section="materials">Materials</button>
+                            <button type="button" class="tab-btn" data-section="instruction">Instruction</button>
+                            <button type="button" class="tab-btn" data-section="assessment">Assessment</button>
+                            <button type="button" class="tab-btn" data-section="notes">Notes</button>
+                        </div>
+                        
+                        <div class="section-content">
+                            <div class="section active" data-section="objective">
+                                <label class="form-label">Learning Objective</label>
+                                <textarea class="form-control" id="lesson-objective" rows="3" placeholder="Students will be able to..."></textarea>
+                            </div>
+                            <div class="section" data-section="materials">
+                                <label class="form-label">Materials Needed</label>
+                                <textarea class="form-control" id="lesson-materials" rows="3" placeholder="List all materials and resources needed..."></textarea>
+                            </div>
+                            <div class="section" data-section="instruction">
+                                <label class="form-label">Instruction Plan</label>
+                                <textarea class="form-control" id="lesson-instruction" rows="6" placeholder="Detailed instruction plan..."></textarea>
+                            </div>
+                            <div class="section" data-section="assessment">
+                                <label class="form-label">Assessment</label>
+                                <textarea class="form-control" id="lesson-assessment" rows="3" placeholder="How will you assess student learning?"></textarea>
+                            </div>
+                            <div class="section" data-section="notes">
+                                <label class="form-label">Additional Notes</label>
+                                <textarea class="form-control" id="lesson-notes" rows="3" placeholder="Any additional notes, modifications, or reminders..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn--secondary" id="cancel-lesson">Cancel</button>
+                <button class="btn btn--outline" id="save-draft-lesson">Save as Draft</button>
+                <button class="btn btn--primary" id="save-lesson">Save Lesson</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Modal -->
+    <div id="search-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Search</h2>
+                <button class="modal-close" id="close-search">×</button>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control" id="global-search" placeholder="Search lessons, templates, and more..." autofocus>
+                <div id="search-results" class="search-results">
+                    <!-- Search results will be populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
