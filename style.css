@@ -1,28 +1,116 @@
-/* Basic layout */
-body{margin:0;font-family:Arial,Helvetica,sans-serif}
-.sidebar{width:180px;background:#f3f4f6;padding:1rem;height:100vh;box-sizing:border-box;float:left}
-.nav-btn{display:block;width:100%;border:none;background:none;padding:.5rem;text-align:left;cursor:pointer}
-.nav-btn:hover,.nav-btn.active{background:#e0e0e0}
-.main{margin-left:180px;padding:1rem}
-.view{display:none}.view.active{display:block}
+/* =========  LessonPlan Pro  — Royal-Blue Theme  ========= */
 
-/* Calendar grid */
-.calendar{display:grid;grid-template-columns:120px repeat(5,1fr);grid-auto-rows:80px;border:1px solid #ccc}
-.calendar div{border:1px solid #ddd;display:flex;align-items:center;justify-content:center}
-.date-nav{margin-bottom:.5rem;display:flex;gap:.5rem;align-items:center}
+/* ---------- Brand Colors ---------- */
+:root {
+  /* Brand palette */
+  --color-primary:   #0046ad;   /* Royal blue */
+  --color-accent:    #d53131;   /* Bright red accent */
+  --color-bg-light:  #f7f9ff;   /* Very-light blue-white */
+  --color-bg-dark:   #002a70;   /* Navy header / sidebar */
+  --color-text-light:#ffffff;   /* White on dark */
+  --color-text-dark: #101010;   /* Dark on light */
+  /* Component shortcuts */
+  --sidebar-bg:       var(--color-bg-dark);
+  --sidebar-hover:    rgba(255,255,255,0.10);
+  --header-bg:        var(--color-bg-dark);
+  --btn-primary-bg:   var(--color-primary);
+  --btn-secondary-bg: var(--color-accent);
+  --lesson-default:   var(--color-primary);
+  --border-light:     #d0d8f0;
+}
 
-/* Modal */
-.modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.4)}
-.modal-box{background:#fff;padding:1rem;border-radius:4px;width:260px}
-.modal-actions{text-align:right;margin-top:.5rem}
-.hidden{display:none}
+/* ---------- Global Reset ---------- */
+* { box-sizing:border-box; margin:0; padding:0 }
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg-light);
+  color: var(--color-text-dark);
+}
 
-/* Misc */
-.stats{display:flex;gap:1rem}
-.stat-card{background:#fafafa;border:1px solid #ddd;padding:.5rem 1rem;border-radius:4px}
-.error{color:#c00;margin-top:.25rem}
-.btn{padding:.25rem .75rem;border:1px solid #888;background:#fff;cursor:pointer}
-.btn--secondary{background:#eee}
-.lesson{background:#555;color:#fff;padding:.25rem .5rem;border-radius:4px;margin:2px;font-size:.8rem}
-.class-item{display:flex;justify-content:space-between;padding:.4rem;border-bottom:1px solid #ddd}
-.delete-btn{background:none;border:none;color:#c00;cursor:pointer}
+/* ---------- Layout ---------- */
+.header {
+  background: var(--header-bg);
+  color: var(--color-text-light);
+  padding: .6rem 1rem;
+  display: flex;
+  align-items: center;
+}
+.layout      { display:flex; height:calc(100vh - 56px); }
+.sidebar      { width:180px; background:var(--sidebar-bg); padding:1rem; }
+.nav-btn {
+  display:block; width:100%; border:none; background:none;
+  color:var(--color-text-light); padding:.6rem; text-align:left;
+  cursor:pointer; font-size:.95rem; border-radius:4px;
+}
+.nav-btn:hover, .nav-btn.active { background:var(--sidebar-hover); }
+.main         { flex:1; padding:1rem; overflow:auto; }
+.view         { display:none; }
+.view.active  { display:block; }
+
+/* ---------- Date Navigation ---------- */
+.date-nav { display:flex; gap:.5rem; align-items:center; margin-bottom:.75rem; }
+.date-nav input[type=date] {
+  padding:.25rem; border:1px solid var(--border-light); border-radius:4px;
+}
+.date-nav button {
+  padding:.25rem .6rem; border:1px solid var(--border-light);
+  border-radius:4px; background:#fff; cursor:pointer;
+}
+
+/* ---------- Calendar Grid ---------- */
+.calendar {
+  display:grid; grid-template-columns:120px repeat(5,1fr);
+  grid-auto-rows:80px; border:1px solid var(--border-light);
+}
+.calendar > div {
+  border:1px solid var(--border-light);
+  display:flex; align-items:center; justify-content:center;
+}
+.calendar-day-header { background:#e8edff; font-weight:bold; }
+.lesson {
+  margin:2px; padding:.25rem .5rem; border-radius:4px;
+  color:#fff; background:var(--lesson-default); font-size:.8rem;
+}
+
+/* ---------- Classes List ---------- */
+#classList        { list-style:none; margin-top:.5rem; padding:0; }
+.class-item {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:.45rem .25rem; border-bottom:1px solid var(--border-light);
+}
+.delete-btn {
+  background:none; border:none; color:var(--color-accent);
+  font-size:1rem; cursor:pointer;
+}
+.delete-btn:hover { filter:brightness(1.3); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  padding:.35rem .9rem; border:1px solid transparent;
+  border-radius:4px; cursor:pointer;
+}
+.btn--primary   { background:var(--btn-primary-bg); color:#fff; border-color:var(--btn-primary-bg); }
+.btn--secondary { background:var(--btn-secondary-bg); color:#fff; border-color:var(--btn-secondary-bg); }
+.btn:hover      { filter:brightness(1.15); }
+
+/* ---------- Modal ---------- */
+.modal {
+  position:fixed; inset:0; display:flex; align-items:center;
+  justify-content:center; background:rgba(0,0,0,.45);
+}
+.modal-box      { background:#fff; padding:1rem; width:260px; border-radius:6px; }
+.modal-box label{ display:block; margin:.6rem 0; }
+.modal-actions  { text-align:right; margin-top:.75rem; }
+.hidden         { display:none; }
+
+/* ---------- Quick-Stats Cards ---------- */
+.stats {
+  display:flex; gap:1rem; margin:.75rem 0;
+}
+.stat-card {
+  background:#fff; border:1px solid var(--border-light);
+  padding:.6rem 1rem; border-radius:4px; text-align:center;
+}
+
+/* ---------- Error Text ---------- */
+.error { color:var(--color-accent); margin-top:.3rem; font-size:.85rem; }
