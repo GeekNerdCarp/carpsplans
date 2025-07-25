@@ -22,9 +22,9 @@ body{
 .header{
   background:var(--color-bg-dark);
   color:var(--color-text-light);
-  padding:.6rem 1rem; display:flex; align-items:center;
+  padding:.6rem 1rem;display:flex;align-items:center;
 }
-.layout{display:flex;height:calc(100vh - 56px)}
+.layout      {display:flex;height:calc(100vh - 56px)}
 .sidebar{
   width:180px;background:var(--color-bg-dark);color:#fff;padding:1rem;
 }
@@ -32,7 +32,7 @@ body{
   display:block;width:100%;border:none;background:none;color:#fff;
   padding:.55rem;text-align:left;cursor:pointer;font-size:.95rem;border-radius:4px;
 }
-.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,0.10)}
+.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,.10)}
 .main{flex:1;padding:1rem;overflow:auto}
 .view{display:none}.view.active{display:block}
 
@@ -47,11 +47,13 @@ body{
   grid-auto-rows:80px;border:1px solid var(--border-light);
 }
 .calendar>div{
-  border:1px solid var(--border-light);display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border-light);
+  display:flex;align-items:center;justify-content:center;
 }
 .calendar-day-header{background:#e5e7eb;font-weight:bold}
 .lesson{
-  margin:2px;padding:.25rem .5rem;border-radius:4px;color:#fff;background:var(--color-primary);font-size:.8rem;
+  margin:2px;padding:.25rem .5rem;border-radius:4px;color:#fff;
+  background:var(--color-primary);font-size:.8rem;
 }
 
 /* Class list */
@@ -76,11 +78,12 @@ body{
 .modal-actions{text-align:right;margin-top:.75rem}
 .hidden{display:none}
 
-/* Quick-stats cards */
+/* Quick-stats */
 .stats{display:flex;gap:1rem;margin:.75rem 0}
 .stat-card{
-  background:#fff;border:1px solid var(--border-light);padding:.6rem 1rem;border-radius:4px;text-align:center;
+  background:#fff;border:1px solid var(--border-light);
+  padding:.6rem 1rem;border-radius:4px;text-align:center;
 }
 
-/* Error text */
+/* Error */
 .error{color:var(--color-accent);margin-top:.3rem;font-size:.85rem}
