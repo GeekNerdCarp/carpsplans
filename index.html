@@ -1,84 +1,342 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LessonPlan Pro</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduPlan - Lesson Planning Made Easy</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- Login Modal -->
-  <div id="loginModal" class="modal">
-    <div class="modal-box">
-      <h3>Teacher Login</h3>
-      <form id="loginForm">
-        <label>Password:
-          <input type="password" id="loginPassword" required />
-        </label>
-        <div id="loginError" class="error hidden">Access Denied</div>
-        <button type="submit" class="btn btn--primary">Login</button>
-      </form>
-    </div>
-  </div>
-
-  <!-- Main App (hidden until login) -->
-  <div id="app" class="hidden">
-    <!-- Sidebar -->
-    <nav class="sidebar">
-      <h2>LessonPlan Pro</h2>
-      <button class="nav-btn active" data-view="dashboard">Dashboard</button>
-      <button class="nav-btn" data-view="calendar">Calendar</button>
-      <button class="nav-btn" data-view="classes">Classes</button>
-    </nav>
-
-    <!-- Main Area -->
-    <main class="main">
-      <!-- Dashboard -->
-      <section id="dashboardView" class="view active">
-        <h1>Dashboard</h1>
-        <div id="quickStats" class="stats"></div>
-        <h2>Recent Lessons</h2>
-        <ul id="recentLessons"></ul>
-      </section>
-
-      <!-- Calendar -->
-      <section id="calendarView" class="view">
-        <div class="date-nav">
-          <button id="prevDayBtn">◀</button>
-          <input type="date" id="datePicker" />
-          <button id="nextDayBtn">▶</button>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <h1>EduPlan</h1>
+                <p>Professional Lesson Planning</p>
+            </div>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="password" class="form-label">Enter Password</label>
+                    <input type="password" id="password" class="form-control" placeholder="Password" required>
+                </div>
+                <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                <div id="loginError" class="error-message hidden">Invalid password. Please try again.</div>
+            </form>
         </div>
-        <div id="calendarGrid" class="calendar"></div>
-      </section>
-
-      <!-- Classes -->
-      <section id="classesView" class="view">
-        <h1>Classes</h1>
-        <button id="addClassBtn" class="btn btn--primary">➕ Add Class</button>
-        <ul id="classList"></ul>
-      </section>
-    </main>
-  </div>
-
-  <!-- Add-Class Modal -->
-  <div id="classModal" class="modal hidden">
-    <div class="modal-box">
-      <h3>Add Class</h3>
-      <label>Name:  <input type="text" id="className" /></label>
-      <label>Period:
-        <select id="classPeriod">
-          <option value="1">1</option><option value="2">2</option><option value="3">3</option>
-          <option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option>
-        </select>
-      </label>
-      <label>Color: <input type="color" id="classColor" value="#3498db" /></label>
-      <div class="modal-actions">
-        <button id="saveClassBtn"   class="btn btn--primary">Save</button>
-        <button id="cancelClassBtn" class="btn btn--secondary">Cancel</button>
-      </div>
     </div>
-  </div>
 
-  <script src="app.js"></script>
+    <!-- Main Application -->
+    <div id="mainApp" class="main-app hidden">
+        <!-- Header Navigation -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1>EduPlan</h1>
+                    <span class="tagline">Lesson Planning</span>
+                </div>
+                <nav class="main-nav">
+                    <button class="nav-btn active" data-section="dashboard">Dashboard</button>
+                    <button class="nav-btn" data-section="calendar">Calendar</button>
+                    <button class="nav-btn" data-section="classes">Classes</button>
+                    <button class="nav-btn" data-section="periods">Periods</button>
+                    <button class="nav-btn" data-section="lessons">Lessons</button>
+                </nav>
+                <div class="header-actions">
+                    <button id="searchBtn" class="btn btn--outline btn--sm">Search</button>
+                    <button id="exportBtn" class="btn btn--outline btn--sm">Export</button>
+                    <button id="logoutBtn" class="btn btn--secondary btn--sm">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Dashboard Section -->
+            <section id="dashboardSection" class="content-section active">
+                <div class="dashboard-header">
+                    <h2>Welcome to Your Dashboard</h2>
+                    <div class="current-date" id="currentDate"></div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Today's Schedule</h3>
+                        <div id="todaySchedule" class="schedule-preview">
+                            <p>No lessons scheduled for today</p>
+                        </div>
+                        <button class="btn btn--primary btn--sm" onclick="showSection('calendar')">View Calendar</button>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Quick Stats</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalClasses">0</span>
+                                <span class="stat-label">Classes</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalLessons">0</span>
+                                <span class="stat-label">Lessons</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number" id="totalPeriods">7</span>
+                                <span class="stat-label">Periods</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Recent Lessons</h3>
+                        <div id="recentLessons" class="recent-lessons">
+                            <p>No recent lessons</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h3>Quick Actions</h3>
+                        <div class="quick-actions">
+                            <button class="btn btn--primary btn--sm" onclick="showSection('lessons')">New Lesson</button>
+                            <button class="btn btn--secondary btn--sm" onclick="showSection('classes')">Manage Classes</button>
+                            <button class="btn btn--secondary btn--sm" onclick="showSection('periods')">Setup Periods</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar Section -->
+            <section id="calendarSection" class="content-section">
+                <div class="section-header">
+                    <h2>Calendar</h2>
+                    <div class="calendar-controls">
+                        <button id="prevMonth" class="btn btn--outline btn--sm">← Previous</button>
+                        <span id="currentMonth" class="current-month"></span>
+                        <button id="nextMonth" class="btn btn--outline btn--sm">Next →</button>
+                        <button id="todayBtn" class="btn btn--primary btn--sm">Today</button>
+                    </div>
+                </div>
+                
+                <div class="calendar-container">
+                    <div class="calendar-grid" id="calendarGrid">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+                </div>
+
+                <div class="selected-date-info">
+                    <h3 id="selectedDateTitle">Select a date to view lessons</h3>
+                    <div id="selectedDateLessons" class="date-lessons">
+                        <!-- Lessons for selected date will appear here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Classes Section -->
+            <section id="classesSection" class="content-section">
+                <div class="section-header">
+                    <h2>Manage Classes</h2>
+                    <button id="addClassBtn" class="btn btn--primary">Add New Class</button>
+                </div>
+
+                <div class="classes-grid" id="classesGrid">
+                    <!-- Classes will be populated by JavaScript -->
+                </div>
+
+                <!-- Add/Edit Class Modal -->
+                <div id="classModal" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="classModalTitle">Add New Class</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <form id="classForm">
+                            <div class="form-group">
+                                <label for="className" class="form-label">Class Name</label>
+                                <input type="text" id="className" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="classDescription" class="form-label">Description</label>
+                                <textarea id="classDescription" class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="classColor" class="form-label">Color</label>
+                                <select id="classColor" class="form-control">
+                                    <option value="#4CAF50">Green</option>
+                                    <option value="#2196F3">Blue</option>
+                                    <option value="#FF9800">Orange</option>
+                                    <option value="#9C27B0">Purple</option>
+                                    <option value="#F44336">Red</option>
+                                    <option value="#795548">Brown</option>
+                                    <option value="#607D8B">Blue Grey</option>
+                                </select>
+                            </div>
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn--secondary" onclick="closeModal('classModal')">Cancel</button>
+                                <button type="submit" class="btn btn--primary">Save Class</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Periods Section -->
+            <section id="periodsSection" class="content-section">
+                <div class="section-header">
+                    <h2>Manage Periods</h2>
+                    <button id="addPeriodBtn" class="btn btn--primary">Add Period</button>
+                </div>
+
+                <div class="periods-list" id="periodsList">
+                    <!-- Periods will be populated by JavaScript -->
+                </div>
+
+                <!-- Add/Edit Period Modal -->
+                <div id="periodModal" class="modal hidden">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="periodModalTitle">Add New Period</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <form id="periodForm">
+                            <div class="form-group">
+                                <label for="periodName" class="form-label">Period Name</label>
+                                <input type="text" id="periodName" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="startTime" class="form-label">Start Time</label>
+                                <input type="time" id="startTime" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="endTime" class="form-label">End Time</label>
+                                <input type="time" id="endTime" class="form-control" required>
+                            </div>
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn--secondary" onclick="closeModal('periodModal')">Cancel</button>
+                                <button type="submit" class="btn btn--primary">Save Period</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lessons Section -->
+            <section id="lessonsSection" class="content-section">
+                <div class="section-header">
+                    <h2>Lesson Plans</h2>
+                    <button id="newLessonBtn" class="btn btn--primary">New Lesson Plan</button>
+                </div>
+
+                <div class="lessons-filters">
+                    <select id="filterClass" class="form-control">
+                        <option value="">All Classes</option>
+                    </select>
+                    <select id="filterPeriod" class="form-control">
+                        <option value="">All Periods</option>
+                    </select>
+                    <input type="date" id="filterDate" class="form-control">
+                </div>
+
+                <div class="lessons-list" id="lessonsList">
+                    <!-- Lessons will be populated by JavaScript -->
+                </div>
+
+                <!-- Lesson Plan Modal -->
+                <div id="lessonModal" class="modal hidden">
+                    <div class="modal-content lesson-modal-content">
+                        <div class="modal-header">
+                            <h3 id="lessonModalTitle">New Lesson Plan</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <form id="lessonForm">
+                            <div class="lesson-form-grid">
+                                <div class="form-group">
+                                    <label for="lessonDate" class="form-label">Date</label>
+                                    <input type="date" id="lessonDate" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lessonClass" class="form-label">Class</label>
+                                    <select id="lessonClass" class="form-control" required>
+                                        <option value="">Select Class</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lessonPeriod" class="form-label">Period</label>
+                                    <select id="lessonPeriod" class="form-control" required>
+                                        <option value="">Select Period</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lessonTitle" class="form-label">Lesson Title</label>
+                                    <input type="text" id="lessonTitle" class="form-control" required>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lessonObjectives" class="form-label">Learning Objectives</label>
+                                <textarea id="lessonObjectives" class="form-control" rows="3" placeholder="What will students learn or be able to do?"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lessonActivities" class="form-label">Activities</label>
+                                <textarea id="lessonActivities" class="form-control" rows="4" placeholder="Describe the lesson activities and teaching strategies"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lessonMaterials" class="form-label">Materials Needed</label>
+                                <textarea id="lessonMaterials" class="form-control" rows="2" placeholder="List materials, resources, and equipment needed"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lessonHomework" class="form-label">Homework/Assignment</label>
+                                <textarea id="lessonHomework" class="form-control" rows="2" placeholder="Describe any homework or assignments"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="lessonNotes" class="form-label">Additional Notes</label>
+                                <textarea id="lessonNotes" class="form-control" rows="3" placeholder="Any additional notes or reminders"></textarea>
+                            </div>
+
+                            <div class="modal-actions">
+                                <button type="button" class="btn btn--secondary" onclick="closeModal('lessonModal')">Cancel</button>
+                                <button type="submit" class="btn btn--primary">Save Lesson Plan</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Search Modal -->
+        <div id="searchModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Search Lessons</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="search-container">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search lessons by title, content, or class...">
+                    <div id="searchResults" class="search-results">
+                        <!-- Search results will appear here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Export Modal -->
+        <div id="exportModal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>Export Data</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="export-options">
+                    <button class="btn btn--primary btn--full-width" id="exportJsonBtn">Export All Data (JSON)</button>
+                    <p class="export-note">This will download a backup file containing all your classes, periods, and lesson plans.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
